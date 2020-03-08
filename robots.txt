@@ -1,0 +1,58 @@
+User-agent: *
+Allow: /$
+Disallow: /404.html$
+Disallow: /offline.html$
+Disallow: /*.jpg$
+Disallow: /*.png$
+Disallow: /\d\d/
+
+
+
+# User-agent: Baiduspider
+
+
+# User-agent: Googlebot
+
+
+# User-agent: MSNBot
+
+
+# User-agent: Baiduspider-image
+
+
+# User-agent: YoudaoBot
+
+
+# User-agent: Sogou web spider
+
+
+# User-agent: Sogou inst spider
+
+
+# User-agent: Sogou spider
+
+
+# User-agent: Sogou spider2
+
+
+# User-agent: Sogou blog
+
+
+# User-agent: Sogou News Spider
+
+
+# User-agent: Sogou Orion spider
+
+
+# User-agent: ChinasoSpider
+
+
+# User-agent: Sosospider
+
+
+# User-agent: yisouspider
+
+
+# User-agent: EasouSpider
+
+

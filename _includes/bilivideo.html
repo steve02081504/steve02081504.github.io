@@ -1,0 +1,25 @@
+{%- comment -%}
+	@param {string} avid
+{%- endcomment -%}
+{%- if include.avid == nil -%}
+	{%- assign _avid = "77325025" -%}
+{%- else -%}
+	{%- assign _avid = include.avid -%}
+{%- endif -%}
+<style>
+	@media all and (min-width: 800px) {
+		.bilivideo{
+			margin-left: -15vw;
+			height: 80vh;
+			width: 80vw;
+		}
+	}
+	@media all and (max-width: 799px) {
+		.bilivideo{
+			margin-left: -4vw;
+			height: calc(100vw * 9 / 16);
+			width: 100vw;
+		}
+	}
+</style>
+<iframe src="//player.bilibili.com/player.html?aid={{ _avid }}&page=1&high_quality=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="bilivideo"> </iframe>

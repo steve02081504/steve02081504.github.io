@@ -1,0 +1,13 @@
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+	{% if site.friends %}
+		{% for friend in site.friends %}
+		<li><a href="{{friend.href}}">{{friend.title}}</a></li>
+		{% endfor %}
+	{% else %}
+		<li>当前并没有任何的友链</li>
+	{% endif %}
+	<br>
+	<li>欢迎互换友链</li>
+</ul>

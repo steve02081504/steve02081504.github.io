@@ -1,0 +1,37 @@
+{%- comment -%}
+	@param {string} name
+	@param {string} repo_name
+	@param {string} repo_url
+	@param {string} user_name
+{%- endcomment -%}
+{%- if include.name == nil -%}
+	{%- if include.repo_name == nil -%}
+		{%- assign _name = "a repo" -%}
+	{%- else -%}
+		{%- assign _name = include.repo_name -%}
+	{%- endif -%}
+{%- else -%}
+	{%- assign _name = include.name -%}
+{%- endif -%}
+{%- if include.user_name == nil -%}
+	{%- assign _user_name = site.github_username -%}
+{%- else -%}
+	{%- assign _user_name = include.user_name -%}
+{%- endif -%}
+{%- if include.repo_name == nil -%}
+	{%- assign _repo_address = _user_name | append: "/" | append: include.name -%}
+{%- else -%}
+	{%- assign _repo_address = _user_name | append: "/" | append: include.repo_name -%}
+{%- endif -%}
+{%- assign _github_repo_url = "https://github.com/" | append: _repo_address -%}
+{%- if include.repo_url == nil -%}
+	{%- assign _repo_url = _github_repo_url -%}
+{%- else -%}
+	{%- assign _repo_url = include.repo_url -%}
+{%- endif -%}
+<a href="{{ _repo_url }}">{{ _name }}</a>
+<a href="{{ _github_repo_url }}/stargazers">
+	<img style="display:inline" src="https://img.shields.io/github/stars/{{ _repo_address }}.svg?style=social">
+</a>
+<img style="display:inline" src="https://img.shields.io/github/languages/top/{{ _repo_address }}.svg?style=flat">
+<img style="display:inline" src="https://img.shields.io/github/license/{{ _repo_address }}.svg?style=flat">
