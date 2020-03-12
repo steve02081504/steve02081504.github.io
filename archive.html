@@ -34,15 +34,14 @@ https://github.com/kitian616/jekyll-TeXt-theme
 				</a>
 				{% endfor %}
 				{% endcapture %}
-        {{ tags | split:'</a>' | sort | join:'</a>' }}
+				{{ tags | split:'</a>' | sort | join:'</a>' }}
 			</div>
 
-            <!-- Article List -->
+			<!-- Article List -->
 			<div class="mini-post-list js-result d-none">
 			{%- assign _sorted_list = site.posts -%}
 			{%- assign _sorted_list = _sorted_list | sort: 'date' -%}
 			{%- assign _sorted_list = _sorted_list | reverse -%}
-
 
 			{%- for _article in _sorted_list -%}
 				{%- assign _tags = '' -%}
@@ -67,16 +66,16 @@ https://github.com/kitian616/jekyll-TeXt-theme
 			{%- endif -%}
 
 				<div class="post-preview item" data-tags="{{ _tags }}">
-				    <a href="{{ _article.url | prepend: site.baseurl }}">
-				        <h2 class="post-title">
-                            {{ _article.title }}
-				        </h2>
-				        {% if _article.subtitle %}
-				        <h3 class="post-subtitle">
-				            {{ _article.subtitle }}
-				        </h3>
-				        {% endif %}
-				    </a>
+					<a href="{{ _article.url | prepend: site.baseurl }}">
+						<h2 class="post-title">
+							{{ _article.title }}
+						</h2>
+						{% if _article.subtitle %}
+							<h3 class="post-subtitle">
+								{{ _article.subtitle }}
+							</h3>
+						{% endif %}
+					</a>
 					<hr>
 				</div>
 			{% endfor %}
