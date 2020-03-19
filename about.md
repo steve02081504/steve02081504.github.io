@@ -22,8 +22,8 @@ email：[steve](mailto:steve02081504@foxmail.com)
 ### 其他账号(请勿用于联系)  
 warframe: [steve02081504](steam://rungameid/230410),已有氏族  
 (如需注册warframe账号，请点[这里](https://www.warframe.com/zh-hans/signup?referrerId=586aa32f3ade7f65084d43e7)以使用邀请链接获取额外的7天经验加成👍）  
-
 bilibili: [原九度凋](https://space.bilibili.com/33124593?share_medium=EDEN&share_source=copy_link&bbid=XY461F14106BFA8AC6367CC9AD81F1DCFFF88&ts=1577103289701)  
+爱发电：[原九度凋]( https://afdian.net/@steve02081504 )  
 
 
 ______
