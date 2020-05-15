@@ -19,6 +19,7 @@ __________
 
 [Forensically online——图片噪点分析](https://29a.ch/photo-forensics/)  
 [waifu2x online——无失真二次元老婆图2倍放大、图片降噪](http://waifu2x.udp.jp/index.zh-CN.html)  
+
 __________
 
 >阴雨天,安眠药和烧炭自杀更配哦.  
