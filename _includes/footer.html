@@ -14,6 +14,19 @@
 					and <a href="https://steve02081504.github.io/about">steve02081504</a> rewrote a little
 				</p>
 			</div>
+			{% if site.moeICP-id %}
+			    <div>
+			         <p>
+			             <a href="https://icp.gov.moe" target="_blank">
+			                萌ICP备
+			             </a>
+			             <img src="https://icp.gov.moe/images/ico64.png" style="margin-bottom:-10px;height: 32px;width: 32px;">
+			             <a href="https://icp.gov.moe/?keyword={{ site.moeICP-id }}" target="_blank">
+			                 {{ site.moeICP-id }}号
+			             </a>
+			         </p>
+			    </div>
+			{% endif %}
 		</div>
 	</div>
 </footer>

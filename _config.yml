@@ -27,6 +27,9 @@ twitter_username:  steve02081504
 #jianshu_username:   xxxxxxx
 #linkedin_username:  firstname-lastname-idxxxx
 
+#萌備案號
+moeICP-id:    test
+
 
 # Build settings
 # from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
