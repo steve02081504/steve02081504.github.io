@@ -12,11 +12,9 @@
 					Theme by <a href="http://huangxuan.me">Hux</a>
 					<br>
 					and <a href="https://steve02081504.github.io/about">steve02081504</a> rewrote a little
-				</p>
-			</div>
-			{% if site.moeICP-id %}
-			    <div>
-			         <p>
+				
+		        	{% if site.moeICP-id %}
+		        	     <br>
 			             <a href="https://icp.gov.moe" target="_blank">
 			                萌ICP备
 			             </a>
@@ -24,9 +22,9 @@
 			             <a href="https://icp.gov.moe/?keyword={{ site.moeICP-id }}" target="_blank">
 			                 {{ site.moeICP-id }}号
 			             </a>
-			         </p>
-			    </div>
-			{% endif %}
+			         {% endif %}
+			     </p>
+			 </div>
 		</div>
 	</div>
 </footer>
