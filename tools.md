@@ -17,6 +17,8 @@ __________
 [月相速览](http://wttr.in/Moon)  
 [与佛伦禅](http://www.keyfc.net/bbs/tools/tudoucode.aspx)  
 
+[毒盘分享链接提取->下载链接](http://pan.naifei.cc/?)（配合[IDM](https://addons.mozilla.org/zh-CN/firefox/addon/tonec-idm-integration-module/)或其他下载器食用更佳）  
+
 [Forensically online——图片噪点分析](https://29a.ch/photo-forensics/)  
 [waifu2x online——无失真二次元老婆图2倍放大、图片降噪](http://waifu2x.udp.jp/index.zh-CN.html)  
 
