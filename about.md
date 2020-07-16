@@ -5,9 +5,9 @@ description: "没什么好写的"
 header-img: "img/about-bg.jpg"
 ---
 ## 关于我  
-普通~~超龄~~高中生一个  
+普通毕业高中生一个  
 喜欢喝果啤，吃薄荷糖、独处以及看书与听歌  
-最近在高四复习  
+最近忙于手工、锻炼、编程  
 
 ### 联系方式  
 twitter: [steve02081504](https://twitter.com/steve02081504)  
@@ -28,11 +28,8 @@ bilibili: [原九度凋](https://space.bilibili.com/33124593?share_medium=EDEN&s
 
 ______
 
-因为在高四，如果想联系我请通过我的email或oicq联系茗，找她商量  
-基本上什么事她都可以替我作决断所以没问题  
-我已经把部分账号交给她保管了  
-未来一年里她也会代替我进行[ELC](https://github.com/steve02081504/ELC)的更新  
-将来可能会在这里发表blog也说不定  
+茗走了，我也不知什么时候回来  
+大概两三年后吧  
 
 ______
 
