@@ -125,23 +125,23 @@ page-mathjax: false
 friends: [
     {
         title: "just a blog",
-        href: "https://steve02081504.github.io"
+        href: "https://steve02081504.github.io/"
     }
     ,{
         title: "某兔子の御用花园",
-        href: "https://www.rabbittu.com"
+        href: "https://www.rabbittu.com/"
     }
     ,{
-        title: "laugh\'s online",
-        href: "https://laugh0608.github.io"
+        title: "laugh's online",
+        href: "https://laugh0608.github.io/"
     }
     ,{
         title: "SunQH",
-        href: "https://sunqinghu.github.io"
+        href: "https://sunqinghu.github.io/"
     }
     ,{
         title: "摸鱼世界",
-        href: "https://www.moyujiang.com"
+        href: "https://www.moyujiang.com/"
     }
     #,{
     #    title: "",
