@@ -4,7 +4,6 @@ title:      "新年快乐"
 subtitle:   "我也不知道写给谁"
 date:       2019-02-04 24:00:00
 author:     "steve02081504"
-header-img: "img/post-bg/2019/02-04-24.jpg"
 tags:
     - 生活
 ---

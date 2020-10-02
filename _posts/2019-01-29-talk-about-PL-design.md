@@ -4,7 +4,6 @@ title:      "浅谈程序语言设计"
 subtitle:   "从本质出发"
 date:       2019-01-29 18:00:00
 author:     "steve02081504"
-header-img: "img/post-bg/2019/01-29-18.jpg"
 tags:
     - 杂谈
 ---

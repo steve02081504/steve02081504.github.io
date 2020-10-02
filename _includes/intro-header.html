@@ -7,7 +7,7 @@
 <style type="text/css">
 	header.intro-header{
 		position: relative;
-		background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ page.date | date: "img/post-bg/%Y/%m-%d-%H.jpg" }}{% endif %}');
+		background-image: url('{{ site.baseurl }}/{% if page.header-img %}{% if page.header-img != "none" %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}{% else %}{{ page.date | date: "img/post-bg/%Y/%m-%d-%H.jpg" }}{% endif %}');
 		background: {{ page.header-bg-css }};
 	}
 

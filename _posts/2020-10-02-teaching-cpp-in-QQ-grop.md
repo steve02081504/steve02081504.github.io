@@ -3,8 +3,10 @@ layout:     post
 title:      "教群友C艹，第一天"
 subtitle:   "我感觉我自己跟个傻子一样自言自语半天"
 date:       2020-10-02 14:27:46
+header-img: "none"
 author:     "steve02081504"
 tags: 
+    - 日常 
     - c++ 
     - 聊天记录 
 ---
