@@ -1,7 +1,7 @@
 {
   "name": "just a blog",
   "short_name": "just a blog",
-  "description": "About an engineer & designer who loves web.",
+  "description": "a blog.",
   "icons": [{
     "src": "icons/128.png",
     "sizes": "128x128",

@@ -20,8 +20,27 @@
 <!-- disqus 公共JS代码 end -->
 {% endif %}
 
-<!--Gitalk评论start  -->
+{% if site.netease_comment %}
+<!-- 网易云跟帖 评论框 start -->
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<!-- 网易云跟帖 评论框 end -->
+<!-- 网易云跟帖JS代码 start -->
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+	var cloudTieConfig = {
+		url: document.location.href, 
+		sourceId: "",
+		productKey: "de25fc98a6fe48b3bc8a7ae765da99a0",
+		target: "cloud-tie-wrapper"
+	};
+	var yunManualLoad = true;
+	Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+<!-- 网易云跟帖JS代码 end -->
+{% endif %}
+
 {% if site.gitalk %}
+<!--Gitalk评论start  -->
   <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
   <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
   <div id="gitalk-container"></div>
