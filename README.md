@@ -18,6 +18,7 @@ _________
 - [projects.md](projects.md) 你个人的项目列表（或者删掉此文件  
 - [tools.md](tools.md) 删掉就行  
 - [CNAME](CNAME) 里面写上你拥有的域名，一行一个  
+- [jump.html](jump.html) 没什么用的跳转小工具  
 - [README.md](README.md) emmmmmm你开心就好  
 
   
