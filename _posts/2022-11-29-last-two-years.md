@@ -55,7 +55,7 @@ tags:
 ### 近期喜好的其他东西？
 
 我最近（两年跨度）很喜欢玩[compass](https://app.nhn-playart.com/compass/tw/)，虽然挺高血压不过快乐的时候是真的快乐  
-好友码[1239667918](http://app.nhn-playart.com/compass/tw/dl/)应援码`C-Edoa`，欢迎互关/应援  
+好友码[1239667918](http://app.nhn-playart.com/compass/tw/dl/)应援码`C-Eboa`，欢迎互关/应援  
 有时会和茗一起开黑~~指菜鸡互啄~~  
 还有就是最近在玩一些手机小游戏，主要是mmo或者r18抽卡手游相关（比如宝石姬，属于是xp暴击（指胸部大小）而且没什么雷区全是纯爱）  
 然后就是听歌看书看番  
