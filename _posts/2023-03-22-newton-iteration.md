@@ -12,7 +12,7 @@ tags:
 
 ### 起因  
 
-在此之前elc的大整数除法实现是用的竖式模拟，单步求商用的是二分查找，效率比较低。  
+[在此之前elc的大整数除法](https://github.com/ELC-lang/ELC/blob/b11ddd3ed111de3a1e3437d72cd0b515c811c4e4/parts/header_file/files/elc/_files/bignum/bignum/ubigint.hpp#L476L560)实现是用的竖式模拟，单步求商用的是二分查找，效率比较低。  
 然后[抱抱熊](https://baobaobear.github.io/)佬说可以摸一摸牛顿迭代，给了一篇全是数学公式的ppt，因为没咋看懂我又找了一堆博客，还顺着博客联系了某个佬（然后被冷处理了，草）  
 最后还是用几天摸出来了。  
 想着网上博客要么是数学公式，要么是什么离散数学，代码又（对我来说）特别难理解，所以就写了这篇post，希望能帮助到什么有缘人。  
