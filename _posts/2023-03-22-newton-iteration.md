@@ -162,3 +162,8 @@ newton_iteration_num_t&operator*=(size_t b)&noexcept{
 	return move(move(_num) >> _scale);
 }
 ```
+
+### 两天后追记  
+
+![速度测试](/img/in-post/2023/03-22-16/speed.png)  
+结论是不如原装。
