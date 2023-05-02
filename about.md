@@ -13,23 +13,17 @@ header-img: "img/about-bg.jpg"
 twitter: [steve02081504](https://twitter.com/steve02081504)  
 github：[steve02081504](https://github.com/steve02081504)
 [![](https://img.shields.io/github/followers/steve02081504.svg?style=social)](https://github.com/steve02081504?tab=followers)  
-OICQ/QQ：[3074282693](http://sighttp.qq.com/authd?IDKEY=44c36470abc6a33d17912f7fde924256c73d47a4cc9e8abe)   
+OICQ/QQ：[3074282693](http://sighttp.qq.com/authd?IDKEY=44c36470abc6a33d17912f7fde924256c73d47a4cc9e8abe)  
 steam：[steve02081504](https://steamcommunity.com/id/steve02081504/)  
 tox：click [here](https://toxme.io/u/steve02081504)  
-email：[steve](mailto:steve02081504@foxmail.com)   
-手机：[02081504](tel:+8615094016415)  
+email：[steve](mailto:steve02081504@foxmail.com)  
+Mastodon：<a rel="me" href="https://ukadon.shillest.net/@steve02081504">steve02081504@ukadon.shillest.net</a>
   
 ### 其他账号(请勿用于联系)  
 compass: 好友码[1239667918](http://app.nhn-playart.com/compass/tw/dl/)应援码`C-Eboa`，欢迎互关/应援  
 trove: [steve02081504](http://trovelive.trionworlds.com/account/reg/account-registration-short-flow.action?voucherCode=QXLN9YCPTLRKLK2TQJLJ&request_locale=en&experience=aaf)  
 bilibili: [原九度凋](https://space.bilibili.com/33124593?share_medium=EDEN&share_source=copy_link&bbid=XY461F14106BFA8AC6367CC9AD81F1DCFFF88&ts=1577103289701)  
 爱发电：[原九度凋]( https://afdian.net/@steve02081504 )  
-
-
-______
-
-茗走了，我也不知什么时候回来  
-大概两三年后吧  
 
 ______
 
