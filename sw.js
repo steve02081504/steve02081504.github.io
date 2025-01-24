@@ -35,7 +35,6 @@ const HOSTNAME_WHITELIST = [
 ]
 const DEPRECATED_CACHES = ['precache-v1', 'runtime', 'main-precache-v1', 'main-runtime']
 
-
 // The Util Function to hack URLs of intercepted requests
 const getCacheBustingUrl = (req) => {
   var now = Date.now();
@@ -88,7 +87,6 @@ const getRedirectUrl = (req) => {
   return url.href
 }
 
-
 /**
  *  @Lifecycle Install
  *  Precache anything static to this version of your app.
@@ -107,7 +105,6 @@ self.addEventListener('install', e => {
   )
 });
 
-
 /**
  *  @Lifecycle Activate
  *  New one activated when old isnt being used.
@@ -125,13 +122,12 @@ self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
 });
 
-
 var fetchHelper = {
 
   fetchThenCache: function(request){
     // Requests with mode "no-cors" can result in Opaque Response,
     // Requests to Allow-Control-Cross-Origin: * can't include credentials.
-    const init = { mode: "cors", credentials: "omit" } 
+    const init = { mode: "cors", credentials: "omit" }
 
     const fetched = fetch(request, init)
     const fetchedCopy = fetched.then(resp => resp.clone());
@@ -141,17 +137,16 @@ var fetchHelper = {
     Promise.all([fetchedCopy, caches.open(CACHE)])
       .then(([response, cache]) => response.ok && cache.put(request, response))
       .catch(_ => {/* eat any errors */})
-    
+
     return fetched;
   },
 
   cacheFirst: function(url){
-    return caches.match(url) 
+    return caches.match(url)
       .then(resp => resp || this.fetchThenCache(url))
       .catch(_ => {/* eat any errors */})
   }
 }
-
 
 /**
  *  @Functional Fetch
@@ -180,33 +175,46 @@ self.addEventListener('fetch', event => {
       return;
     }
 
-    // Stale-while-revalidate for possiblily dynamic content
-    // similar to HTTP's stale-while-revalidate: https://www.mnot.net/blog/2007/12/12/stale
-    // Upgrade from Jake's to Surma's: https://gist.github.com/surma/eb441223daaedf880801ad80006389f1
-    const cached = caches.match(event.request);
-    const fetched = fetch(getCacheBustingUrl(event.request), { cache: "no-store" });
-    const fetchedCopy = fetched.then(resp => resp.clone());
-    
-    // Call respondWith() with whatever we get first.
-    // Promise.race() resolves with first one settled (even rejected)
-    // If the fetch fails (e.g disconnected), wait for the cache.
-    // If there’s nothing in cache, wait for the fetch.
-    // If neither yields a response, return offline pages.
+    // Network-first strategy, falling back to cache on network failure
     event.respondWith(
-      Promise.race([fetched.catch(_ => cached), cached])
-        .then(resp => resp || fetched)
-        .catch(_ => caches.match('offline.html'))
-    );
+      fetch(getCacheBustingUrl(event.request), { cache: "no-store" })
+        .then(response => {
+          // Check if we received a valid response
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return caches.match(event.request)
+              .then(cachedResponse => {
+                return cachedResponse || caches.match('offline.html');
+              });
+          }
 
-    // Update the cache with the version we fetched (only for ok status)
-    event.waitUntil(
-      Promise.all([fetchedCopy, caches.open(CACHE)])
-        .then(([response, cache]) => response.ok && cache.put(event.request, response))
-        .catch(_ => {/* eat any errors */ })
+          // IMPORTANT: Clone the response. A response is a stream
+          // and because we want the browser to consume the response
+          // as well as the cache consuming the response, we need
+          // to clone it so we have two streams.
+          var responseToCache = response.clone();
+
+          caches.open(CACHE)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+
+          return response;
+        })
+        .catch(error => {
+          // Network request failed, try to get it from the cache.
+          return caches.match(event.request)
+            .then(cachedResponse => {
+              return cachedResponse || caches.match('offline.html');
+            });
+        })
     );
 
     // If one request is a HTML naviagtion, checking update!
     if (isNavigationReq(event.request)) {
+        const cached = caches.match(event.request);
+        const fetched = fetch(getCacheBustingUrl(event.request), { cache: "no-store" });
+        const fetchedCopy = fetched.then(resp => resp.clone());
+
       // you need "preserve logs" to see this log
       // cuz it happened before navigating
       console.log(`fetch ${event.request.url}`)
@@ -214,7 +222,6 @@ self.addEventListener('fetch', event => {
     }
   }
 });
-
 
 /**
  * Broadcasting all clients with MessageChannel API
@@ -243,7 +250,7 @@ function sendMessageToClientsAsync(msg) {
 /**
  * if content modified, we can notify clients to refresh
  * TODO: Gh-pages rebuild everything in each release. should find a workaround (e.g. ETag with cloudflare)
- * 
+ *
  * @param  {Promise<response>} cachedResp  [description]
  * @param  {Promise<response>} fetchedResp [description]
  * @return {Promise}
@@ -252,6 +259,9 @@ function revalidateContent(cachedResp, fetchedResp) {
   // revalidate when both promise resolved
   return Promise.all([cachedResp, fetchedResp])
     .then(([cached, fetched]) => {
+      // If there's no cached response, no need to revalidate.
+      if (!cached) return;
+
       const cachedVer = cached.headers.get('last-modified')
       const fetchedVer = fetched.headers.get('last-modified')
       console.log(`"${cachedVer}" vs. "${fetchedVer}"`);
