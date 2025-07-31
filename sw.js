@@ -187,9 +187,9 @@ async function cleanupExpiredCache() {
 			console.log(`[SW Cleanup] Deleting ${urlsToDelete.length} expired items.`)
 			const cache = await caches.open(CACHE_NAME)
 			await Promise.all(urlsToDelete.map(url => cache.delete(url)))
-		} else {
+		} else
 			console.log('[SW Cleanup] No expired items to clean up.')
-		}
+
 	} catch (error) {
 		console.error('[SW Cleanup] Cache cleanup process failed:', error)
 	}
@@ -208,7 +208,7 @@ async function fetchAndCache(request) {
 	try {
 		const cache = await caches.open(CACHE_NAME)
 		const cachedResponse = await cache.match(request)
-		const can_cors = cachedResponse ? cachedResponse.headers.get('Access-Control-Allow-Origin') : new URL(request.url).origin !== self.location.origin && await fetch(request, { method: 'HEAD' }).then(response => response.headers.get('Access-Control-Allow-Origin'))
+		const can_cors = cachedResponse ? cachedResponse.headers.get('Access-Control-Allow-Origin') : new URL(request.url).origin !== self.location.origin && await fetch(request.url, { method: 'HEAD' }).then(response => response.headers.get('Access-Control-Allow-Origin'))
 		const networkResponse = await fetch(request, { mode: can_cors ? 'cors' : undefined })
 
 		if (networkResponse && networkResponse.ok && networkResponse.type !== 'opaque') {
@@ -227,9 +227,9 @@ async function fetchAndCache(request) {
 				await cache.put(request, responseToCache)
 				await updateTimestamp(request.url, now)
 			}
-		} else if (networkResponse && networkResponse.type !== 'opaque') {
+		} else if (networkResponse && networkResponse.type !== 'opaque')
 			console.warn(`[SW ${CACHE_NAME}] Fetch for ${request.url} responded with ${networkResponse.status}. Not caching.`)
-		}
+
 
 		return networkResponse
 	} catch (error) {
@@ -308,25 +308,38 @@ async function handleCacheFirstWithBackgroundUpdate(request) {
 }
 
 /**
- * @description 网络优先策略（Network-First），结合内容更新通知。
+ * @description 网络优先策略（Network-First），结合内容更新通知，并内置离线回退。
  * @param {Request} request - fetch 事件中的请求对象。
  * @returns {Promise<Response>}
  */
 async function handleNetworkFirst(request) {
 	try {
+		// 优先尝试网络请求
 		const networkResponse = await fetchAndCache(request.clone())
 
-		if (isNavigationReq(request)) {
-			// 非阻塞地检查内容更新
-			revalidateAndNotify(request, networkResponse.clone())
-		}
+		if (isNavigationReq(request))
+			revalidateAndNotify(request, networkResponse.clone()) // 非阻塞地检查内容更新
 
 		return networkResponse
 	} catch (error) {
-		console.warn(`[SW ${CACHE_NAME}] Network fetch failed for ${request.url}. Trying cache.`)
+		// 网络请求失败，进入回退逻辑
+		console.warn(`[SW ${CACHE_NAME}] Network fetch failed for ${request.url}. Trying cache.`, error)
 		const cache = await caches.open(CACHE_NAME)
 		const cachedResponse = await cache.match(request)
-		if (cachedResponse) return cachedResponse
+
+		// 如果缓存中有，则返回缓存的响应
+		if (cachedResponse) {
+			console.log(`[SW ${CACHE_NAME}] Serving from cache as fallback: ${request.url}`)
+			return cachedResponse
+		}
+
+		// 如果缓存中也没有，并且这是一个页面导航请求，则返回统一的离线页面
+		if (isNavigationReq(request)) {
+			console.log(`[SW ${CACHE_NAME}] Network and cache failed for navigation. Serving offline page.`)
+			const offlinePage = await cache.match('./offline.html')
+			// 确保 offline.html 已经被缓存
+			if (offlinePage) return offlinePage
+		}
 		throw error
 	}
 }
@@ -334,9 +347,9 @@ async function handleNetworkFirst(request) {
 
 // --- 路由辅助函数 ---
 
-const isNavigationReq = (req) => (req.mode === 'navigate' || (req.method === 'GET' && req.headers.get('accept')?.includes('text/html')))
+const isNavigationReq = (req) => req.mode === 'navigate' || (req.method === 'GET' && req.headers.get('accept')?.includes('text/html'))
 const endWithExtension = (req) => Boolean(new URL(req.url).pathname.match(/\.\w+$/))
-const shouldRedirectForPrettyUrl = (req) => (isNavigationReq(req) && new URL(req.url).pathname.substr(-1) !== '/' && !endWithExtension(req))
+const shouldRedirectForPrettyUrl = (req) => isNavigationReq(req) && new URL(req.url).pathname.substr(-1) !== '/' && !endWithExtension(req)
 const getRedirectUrl = (req) => {
 	const url = new URL(req.url)
 	url.pathname += '/'
@@ -387,11 +400,11 @@ self.addEventListener('activate', event => {
 					}),
 			)
 
-			if ('periodicSync' in self.registration) {
+			if ('periodicSync' in self.registration)
 				try {
 					await self.registration.periodicSync.register(PERIODIC_SYNC_TAG, { minInterval: 24 * 60 * 60 * 1000 })
 				} catch (err) { console.error('[SW] Periodic sync registration failed:', err) }
-			}
+
 
 			await self.clients.claim()
 			await cleanupExpiredCache()
@@ -400,22 +413,22 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('periodicsync', event => {
-	if (event.tag === PERIODIC_SYNC_TAG) {
+	if (event.tag === PERIODIC_SYNC_TAG)
 		event.waitUntil(cleanupExpiredCache())
-	}
+
 })
 
 self.addEventListener('fetch', event => {
 	const { request } = event
-	for (const route of routes) {
+	for (const route of routes)
 		if (route.condition({ request, url: new URL(request.url) })) {
 			const handlerResult = route.handler({ request })
 			if (handlerResult) {
 				const finalResponsePromise = Promise.resolve(handlerResult).catch(error => {
 					console.error(`[SW Fetch] Final fallback for ${request.url}:`, error)
-					if (isNavigationReq(request)) {
+					if (isNavigationReq(request))
 						return caches.match('./offline.html')
-					}
+
 					return new Response('', { status: 503, statusText: 'Service Unavailable' })
 				})
 				event.respondWith(finalResponsePromise)
@@ -423,5 +436,5 @@ self.addEventListener('fetch', event => {
 			}
 			return
 		}
-	}
+
 })
