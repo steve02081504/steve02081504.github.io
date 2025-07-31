@@ -348,14 +348,6 @@ async function handleNetworkFirst(request) {
 // --- 路由辅助函数 ---
 
 const isNavigationReq = (req) => req.mode === 'navigate' || (req.method === 'GET' && req.headers.get('accept')?.includes('text/html'))
-const endWithExtension = (req) => Boolean(new URL(req.url).pathname.match(/\.\w+$/))
-const shouldRedirectForPrettyUrl = (req) => isNavigationReq(req) && new URL(req.url).pathname.substr(-1) !== '/' && !endWithExtension(req)
-const getRedirectUrl = (req) => {
-	const url = new URL(req.url)
-	url.pathname += '/'
-	return url.href
-}
-
 
 // --- 路由表 ---
 
@@ -366,7 +358,6 @@ const getRedirectUrl = (req) => {
 const routes = [
 	{ condition: ({ request }) => request.method !== 'GET', handler: () => null },
 	{ condition: ({ url }) => !url.protocol.startsWith('http'), handler: () => null },
-	{ condition: ({ request }) => shouldRedirectForPrettyUrl(request), handler: ({ request }) => Response.redirect(getRedirectUrl(request), 301) },
 	{ condition: ({ url }) => url.origin !== self.location.origin, handler: ({ request }) => handleCacheFirstWithBackgroundUpdate(request) },
 	{ condition: () => true, handler: ({ request }) => handleNetworkFirst(request) },
 ]
