@@ -4,13 +4,13 @@
  * @description 缓存存储的名称。更改此值将触发 Service Worker 的更新流程，并自动清理旧缓存。
  * @type {string}
  */
-const CACHE_NAME = 'hux-blog-final'
+const CACHE_NAME = 'blog'
 
 /**
  * @description 用于存储缓存元数据（如时间戳）的 IndexedDB 数据库名称。
  * @type {string}
  */
-const DB_NAME = 'hux-blog-cache-metadata'
+const DB_NAME = 'blog-cache-metadata'
 
 /**
  * @description IndexedDB 中用于存储时间戳记录的对象存储空间（Object Store）名称。
@@ -208,7 +208,7 @@ async function fetchAndCache(request) {
 	try {
 		const cache = await caches.open(CACHE_NAME)
 		let error, networkResponse = await fetch(request).catch(_ => { error = _ })
-		if (networkResponse?.type === 'opaque' || !networkResponse.ok) {
+		if (networkResponse?.type === 'opaque' || !networkResponse?.ok) {
 			const cachedResponse = await cache.match(request)
 			const can_cors = cachedResponse ? cachedResponse.headers.get('Access-Control-Allow-Origin') : new URL(request.url).origin !== self.location.origin && await fetch(request.url, { method: 'HEAD' }).then(response => response.headers.get('Access-Control-Allow-Origin')).catch(_ => null)
 			const newNetworkResponse = await fetch(request.url, { ...request, mode: can_cors ? 'cors' : request.mode === 'no-cors' ? 'no-cors' : undefined, url: undefined }).catch(_ => { error = _ })
@@ -289,9 +289,9 @@ async function revalidateAndNotify(request, networkResponse) {
  * @param {Request} request - fetch 事件中的请求对象。
  * @returns {Promise<Response>}
  */
-async function handleCacheFirstWithBackgroundUpdate(request) {
+async function handleCacheFirst(request) {
 	const cache = await caches.open(CACHE_NAME)
-	const cachedResponse = await cache.match(request)
+	const cachedResponse = await cache.match(request, { ignoreVary: true })
 
 	const now = Date.now()
 	const storedTimestamp = await getTimestamp(request.url)
@@ -330,7 +330,7 @@ async function handleNetworkFirst(request) {
 		// 网络请求失败，进入回退逻辑
 		console.warn(`[SW ${CACHE_NAME}] Network fetch failed for ${request.url}. Trying cache.`, error)
 		const cache = await caches.open(CACHE_NAME)
-		const cachedResponse = await cache.match(request)
+		const cachedResponse = await cache.match(request, { ignoreVary: true })
 
 		// 如果缓存中有，则返回缓存的响应
 		if (cachedResponse) {
@@ -356,14 +356,47 @@ const isNavigationReq = (req) => req.mode === 'navigate' || (req.method === 'GET
 
 // --- 路由表 ---
 
+let coldBootMode = false
+
+self.addEventListener('message', event => {
+	if (event.data?.type === 'EXIT_COLD_BOOT') {
+		const wasColdBoot = coldBootMode
+		coldBootMode = false
+		console.log('[SW] Exited cold boot mode.')
+		if (event.ports[0]) event.ports[0].postMessage({ wasColdBoot })
+	}
+	else if (event.data?.type === 'ENTER_COLD_BOOT') {
+		coldBootMode = true
+		console.log('[SW] Entered cold boot mode.')
+	}
+})
+
 /**
  * @description 使用路由表管理请求处理逻辑。
  * @type {Array<{condition: (context: {request: Request, url: URL}) => boolean, handler: (context: {request: Request}) => Promise<Response> | Response | null}>}
  */
-const routes = [
+const routes = [// 忽略无缓存请求。
+	{ condition: ({ request }) => request.cache === 'no-store', handler: () => null },
 	{ condition: ({ request }) => request.method !== 'GET', handler: () => null },
 	{ condition: ({ url }) => !url.protocol.startsWith('http'), handler: () => null },
-	{ condition: ({ url }) => url.origin !== self.location.origin, handler: ({ request }) => handleCacheFirstWithBackgroundUpdate(request) },
+	// 冷启动模式：优先使用缓存
+	{
+		condition: ({ url }) => {
+			if (url.searchParams.get('cold_bootting') === 'true') coldBootMode = true
+			return coldBootMode
+		},
+		handler: ({ event, url }) => {
+			if (url.searchParams.has('cold_bootting')) {
+				const cleanUrl = new URL(url)
+				cleanUrl.searchParams.delete('cold_bootting')
+				const cleanRequest = new Request(cleanUrl, event.request)
+				return handleCacheFirst(cleanRequest)
+			}
+			return handleCacheFirst(event.request)
+		},
+	},
+	{ condition: ({ request }) => request.cache === 'no-cache', handler: ({ request }) => handleNetworkFirst(request) },
+	{ condition: ({ url }) => url.origin !== self.location.origin, handler: ({ request }) => handleCacheFirst(request) },
 	{ condition: () => true, handler: ({ request }) => handleNetworkFirst(request) },
 ]
 
@@ -417,8 +450,8 @@ self.addEventListener('periodicsync', event => {
 self.addEventListener('fetch', event => {
 	const { request } = event
 	for (const route of routes)
-		if (route.condition({ request, url: new URL(request.url) })) {
-			const handlerResult = route.handler({ request })
+		if (route.condition({ event, request, url: new URL(request.url) })) {
+			const handlerResult = route.handler({ event, request, url: new URL(request.url) })
 			if (handlerResult) {
 				const finalResponsePromise = Promise.resolve(handlerResult).catch(error => {
 					console.error(`[SW Fetch] Final fallback for ${request.url}:`, error)
