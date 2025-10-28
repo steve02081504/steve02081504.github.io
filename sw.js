@@ -416,6 +416,8 @@ self.addEventListener('periodicsync', event => {
 
 self.addEventListener('fetch', event => {
 	const { request } = event
+	if (request.cache === 'no-cache') return handleNetworkFirst(request)
+	if (request.cache === 'no-store') return
 	for (const route of routes)
 		if (route.condition({ request, url: new URL(request.url) })) {
 			const handlerResult = route.handler({ request })
