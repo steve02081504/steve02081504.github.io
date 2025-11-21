@@ -356,6 +356,21 @@ const isNavigationReq = (req) => req.mode === 'navigate' || (req.method === 'GET
 
 // --- 路由表 ---
 
+let coldBootMode = false
+
+self.addEventListener('message', event => {
+	if (event.data?.type === 'EXIT_COLD_BOOT') {
+		const wasColdBoot = coldBootMode
+		coldBootMode = false
+		console.log('[SW] Exited cold boot mode.')
+		if (event.ports[0]) event.ports[0].postMessage({ wasColdBoot })
+	}
+	else if (event.data?.type === 'ENTER_COLD_BOOT') {
+		coldBootMode = true
+		console.log('[SW] Entered cold boot mode.')
+	}
+})
+
 /**
  * @description 使用路由表管理请求处理逻辑。
  * @type {Array<{condition: (context: {request: Request, url: URL}) => boolean, handler: (context: {request: Request}) => Promise<Response> | Response | null}>}
@@ -363,6 +378,22 @@ const isNavigationReq = (req) => req.mode === 'navigate' || (req.method === 'GET
 const routes = [
 	{ condition: ({ request }) => request.method !== 'GET', handler: () => null },
 	{ condition: ({ url }) => !url.protocol.startsWith('http'), handler: () => null },
+	// 冷启动模式：优先使用缓存
+	{
+		condition: ({ url }) => {
+			if (url.searchParams.get('cold_bootting') === 'true') coldBootMode = true
+			return coldBootMode
+		},
+		handler: ({ event, url }) => {
+			if (url.searchParams.has('cold_bootting')) {
+				const cleanUrl = new URL(url)
+				cleanUrl.searchParams.delete('cold_bootting')
+				const cleanRequest = new Request(cleanUrl, event.request)
+				return handleCacheFirst(cleanRequest)
+			}
+			return handleCacheFirst(event.request)
+		},
+	},
 	{ condition: ({ url }) => url.origin !== self.location.origin, handler: ({ request }) => handleCacheFirstWithBackgroundUpdate(request) },
 	{ condition: () => true, handler: ({ request }) => handleNetworkFirst(request) },
 ]
