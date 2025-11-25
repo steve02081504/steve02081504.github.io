@@ -4,13 +4,13 @@
  * @description 缓存存储的名称。更改此值将触发 Service Worker 的更新流程，并自动清理旧缓存。
  * @type {string}
  */
-const CACHE_NAME = 'hux-blog-final'
+const CACHE_NAME = 'blog'
 
 /**
  * @description 用于存储缓存元数据（如时间戳）的 IndexedDB 数据库名称。
  * @type {string}
  */
-const DB_NAME = 'hux-blog-cache-metadata'
+const DB_NAME = 'blog-cache-metadata'
 
 /**
  * @description IndexedDB 中用于存储时间戳记录的对象存储空间（Object Store）名称。
